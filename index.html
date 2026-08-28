@@ -1,0 +1,415 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f5f5f7;--card:#ffffff;--text:#1d1d1f;--text2:#6e6e73;--text3:#aeaeb2;
+  --accent:#0071e3;--accent-light:#e8f1fd;
+  --purple:#7c3aed;--purple-light:#f3f0ff;--purple-tab-bg:#ede9fe;
+  --orange:#c2410c;--orange-light:#fff7ed;
+  --border:#d2d2d7;--border-light:#e8e8ed;
+  --radius:14px;--radius-sm:10px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:16px;}
+.outer{max-width:800px;margin:0 auto;padding:2rem 1.25rem 3rem;}
+.header{text-align:center;margin-bottom:2rem;}
+.header-icon{font-size:42px;margin-bottom:0.5rem;}
+.title{font-size:24px;font-weight:600;color:var(--text);letter-spacing:-0.4px;}
+.subtitle{font-size:15px;color:var(--text2);margin-top:5px;}
+.tabs{display:flex;gap:0;background:#e8e8ed;border-radius:12px;padding:3px;margin-bottom:1.5rem;}
+.tab{flex:1;padding:9px 6px;font-size:14px;font-weight:500;border:none;background:transparent;cursor:pointer;color:var(--text2);border-radius:9px;transition:all 0.2s;white-space:nowrap;font-family:inherit;}
+.tab.active{background:#fff;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.13);}
+.tab.active.purple-tab{background:var(--purple-tab-bg);color:var(--purple);}
+.panel{display:none;}.panel.active{display:block;}
+.card{background:var(--card);border-radius:var(--radius);padding:1.5rem;margin-bottom:14px;border:0.5px solid var(--border-light);}
+.card-title{font-size:17px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.card-desc{font-size:14px;color:var(--text2);margin-bottom:1.25rem;line-height:1.55;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:7px;}
+.field input{width:100%;padding:12px 14px;font-size:16px;font-family:inherit;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;color:var(--text);outline:none;transition:border 0.15s;}
+.field input:focus{border-color:var(--accent);}
+.field input:disabled{background:#f5f5f7;color:var(--text2);cursor:not-allowed;}
+.field .hint{font-size:12px;color:var(--text3);margin-top:5px;}
+.fee-section{background:var(--orange-light);border:1px solid #fed7aa;border-radius:var(--radius-sm);padding:1rem 1.125rem;margin-bottom:16px;}
+.fee-section-title{font-size:13px;font-weight:600;color:var(--orange);margin-bottom:10px;}
+.fee-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fee-row .field{margin-bottom:0;}
+.fee-total{font-size:13px;color:var(--orange);margin-top:8px;font-weight:500;}
+.derived-tag{font-size:11px;font-weight:500;background:var(--accent-light);color:var(--accent);border-radius:5px;padding:2px 7px;margin-left:5px;vertical-align:middle;}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.input-row .field{margin-bottom:0;}
+.result-box{background:#f5f5f7;border-radius:var(--radius-sm);padding:1.125rem 1.25rem;margin-top:14px;}
+.result-label{font-size:12px;font-weight:500;color:var(--text2);letter-spacing:0.3px;text-transform:uppercase;margin-bottom:5px;}
+.result-value{font-size:28px;font-weight:600;color:var(--text);letter-spacing:-0.5px;}
+.result-sub{font-size:13px;color:var(--text3);margin-top:4px;}
+.formula{font-size:12px;color:var(--text3);margin-top:7px;font-family:monospace;}
+.highlight{background:var(--accent);border-radius:var(--radius-sm);padding:1.125rem 1.25rem;margin-top:14px;}
+.highlight .result-label{color:rgba(255,255,255,0.7);}
+.highlight .result-value{color:#fff;font-size:28px;font-weight:600;letter-spacing:-0.5px;}
+.highlight .result-sub{color:rgba(255,255,255,0.65);font-size:13px;margin-top:4px;}
+.highlight .formula{color:rgba(255,255,255,0.5);font-size:12px;margin-top:7px;font-family:monospace;}
+.highlight-purple{background:var(--purple);border-radius:var(--radius-sm);padding:1.125rem 1.25rem;margin-top:14px;}
+.highlight-purple .result-label{color:rgba(255,255,255,0.7);font-size:12px;font-weight:500;letter-spacing:0.3px;text-transform:uppercase;margin-bottom:5px;}
+.highlight-purple .result-value{color:#fff;font-size:28px;font-weight:600;letter-spacing:-0.5px;}
+.highlight-purple .formula{color:rgba(255,255,255,0.5);font-size:12px;margin-top:7px;font-family:monospace;}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius-sm);padding:0.875rem 1rem;margin-top:14px;font-size:13px;color:#b91c1c;display:none;}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px;}
+.metric{background:#f5f5f7;border-radius:var(--radius-sm);padding:14px 16px;}
+.metric-label{font-size:12px;color:var(--text2);margin-bottom:4px;}
+.metric-value{font-size:18px;font-weight:600;color:var(--text);}
+.mode-switch{display:flex;gap:0;background:#ede9fe;border-radius:11px;padding:3px;margin-bottom:1.25rem;}
+.mode-btn{flex:1;padding:9px;font-size:14px;font-weight:500;border:none;background:transparent;cursor:pointer;color:var(--purple);border-radius:8px;transition:all 0.2s;font-family:inherit;opacity:0.6;}
+.mode-btn.active{background:#fff;color:var(--purple);box-shadow:0 1px 4px rgba(124,58,237,0.18);opacity:1;}
+.funnel{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px;}
+.funnel-step{background:#f5f5f7;border-radius:7px;padding:5px 11px;font-size:13px;font-weight:500;color:var(--text);}
+.funnel-arrow{font-size:13px;color:var(--text3);}
+.divider{border:none;border-top:1px solid var(--border-light);margin:16px 0;}
+.export-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:14px;padding:13px;font-size:15px;font-weight:500;font-family:inherit;background:#f5f5f7;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;color:var(--text2);transition:all 0.15s;}
+.export-btn:hover{background:#e8e8ed;color:var(--text);}
+.export-btn:active{transform:scale(0.98);}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:5px;margin-left:6px;vertical-align:middle;}
+.badge-green{background:#e8faf0;color:#1c7c3a;}
+.badge-purple{background:var(--purple-light);color:var(--purple);}
+@media(max-width:600px){
+  .outer{padding:1.25rem 1rem 2.5rem;}
+  .title{font-size:21px;}.subtitle{font-size:14px;}
+  .tab{font-size:13px;padding:8px 4px;}
+  .card{padding:1.25rem;}
+  .field input{font-size:16px;padding:13px 14px;}
+  .input-row,.fee-row{grid-template-columns:1fr;}
+  .result-value,.highlight .result-value,.highlight-purple .result-value{font-size:24px;}
+  .metrics-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+
+<div class="outer" id="app">
+  <div class="header">
+    <div class="header-icon">💰</div>
+    <div class="title">貝拉拉幫你發大財小工具</div>
+    <div class="subtitle">定價・損益・業績，一鍵算清楚</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('pricing',this)">毛利 & 定價</button>
+    <button class="tab" onclick="switchTab('breakeven',this)">損益兩平</button>
+    <button class="tab" onclick="switchTab('revenue',this)">目標營業額</button>
+    <button class="tab purple-tab" onclick="switchTab('perf',this)">行銷專用</button>
+  </div>
+
+  <!-- 毛利率 & 定價 -->
+  <div id="panel-pricing" class="panel active">
+    <div class="card" id="export-pricing">
+      <div class="card-title">計算毛利率</div>
+      <div class="card-desc">輸入售價、成本與手續費，算出實際毛利率。</div>
+
+      <div class="field"><label>售價（元）</label><input type="number" id="p-price" placeholder="請輸入售價" oninput="calcMargin()"/></div>
+      <div class="field"><label>成本（元）</label><input type="number" id="p-cost" placeholder="請輸入成本" oninput="calcMargin()"/></div>
+
+      <div class="fee-section">
+        <div class="fee-section-title">手續費設定（選填）</div>
+        <div class="fee-row">
+          <div class="field"><label>平台抽成（%）</label><input type="number" id="p-fee1" placeholder="例如 3" step="0.01" oninput="calcMargin()"/><div class="hint">例：平台抽成 3%</div></div>
+          <div class="field"><label>金流手續費（%）</label><input type="number" id="p-fee2" placeholder="例如 2.45" step="0.01" oninput="calcMargin()"/><div class="hint">例：刷卡手續費 2.45%</div></div>
+        </div>
+        <div class="fee-total" id="p-fee-total" style="display:none"></div>
+      </div>
+
+      <div class="result-box" id="margin-result" style="display:none">
+        <div class="result-label">實際毛利率</div>
+        <div class="result-value" id="margin-val">—</div>
+        <div class="result-sub" id="margin-sub"></div>
+        <div class="formula" id="margin-formula"></div>
+      </div>
+
+      <hr class="divider"/>
+      <div class="card-title">反推定價</div>
+      <div class="card-desc">已知成本、手續費與目標毛利率，算出應該賣多少。</div>
+
+      <div class="field"><label>進價（元）</label><input type="number" id="d-cost" placeholder="請輸入進價" oninput="calcPrice()"/></div>
+      <div class="field"><label>目標毛利率（%）</label><input type="number" id="d-margin" placeholder="請輸入目標毛利率，例如 30" min="1" max="99" oninput="calcPrice()"/></div>
+
+      <div class="fee-section">
+        <div class="fee-section-title">手續費設定（選填）</div>
+        <div class="fee-row">
+          <div class="field"><label>平台抽成（%）</label><input type="number" id="d-fee1" placeholder="例如 3" step="0.01" oninput="calcPrice()"/><div class="hint">例：平台抽成 3%</div></div>
+          <div class="field"><label>金流手續費（%）</label><input type="number" id="d-fee2" placeholder="例如 2.45" step="0.01" oninput="calcPrice()"/><div class="hint">例：刷卡手續費 2.45%</div></div>
+        </div>
+        <div class="fee-total" id="d-fee-total" style="display:none"></div>
+      </div>
+
+      <div class="warn-box" id="price-warn">⚠️ 手續費率 + 目標毛利率 ≥ 100%，定價無法成立，請重新調整。</div>
+      <div class="highlight" id="price-result" style="display:none">
+        <div class="result-label">建議定價</div>
+        <div class="result-value" id="price-val">—</div>
+        <div class="result-sub" id="price-sub"></div>
+        <div class="formula" id="price-formula"></div>
+      </div>
+    </div>
+    <button class="export-btn" onclick="exportJPG('export-pricing','毛利率與定價')"><i class="ti ti-download" aria-hidden="true"></i> 匯出此頁為 JPG</button>
+  </div>
+
+  <!-- 損益兩平 -->
+  <div id="panel-breakeven" class="panel">
+    <div class="card" id="export-breakeven">
+      <div class="card-title">損益兩平點</div>
+      <div class="card-desc">至少要達到多少營業額，才能覆蓋所有固定成本？</div>
+      <div class="field"><label>每月固定成本（元）</label><input type="number" id="b-fixed" placeholder="請輸入固定成本，例如租金、薪資" oninput="calcBreakeven()"/></div>
+      <div class="field"><label>毛利率（%）</label><input type="number" id="b-margin" placeholder="請輸入毛利率" oninput="calcBreakeven()"/></div>
+      <div class="result-box" id="breakeven-result" style="display:none">
+        <div class="result-label">損益兩平營業額</div>
+        <div class="result-value" id="breakeven-val">—</div>
+        <div class="result-sub" id="breakeven-sub"></div>
+        <div class="formula">= 固定成本 ÷ 毛利率</div>
+      </div>
+    </div>
+    <button class="export-btn" onclick="exportJPG('export-breakeven','損益兩平點')"><i class="ti ti-download" aria-hidden="true"></i> 匯出此頁為 JPG</button>
+  </div>
+
+  <!-- 目標營業額 -->
+  <div id="panel-revenue" class="panel">
+    <div class="card" id="export-revenue">
+      <div class="card-title">目標營業額</div>
+      <div class="card-desc">想達到某個獲利目標，需要多少營業額？</div>
+      <div class="field"><label>每月固定成本（元）</label><input type="number" id="r-fixed" placeholder="請輸入固定成本" oninput="calcRevenue()"/></div>
+      <div class="field"><label>目標獲利（元）</label><input type="number" id="r-profit" placeholder="請輸入目標獲利金額" oninput="calcRevenue()"/></div>
+      <div class="field"><label>毛利率（%）</label><input type="number" id="r-margin" placeholder="請輸入毛利率" oninput="calcRevenue()"/></div>
+      <div id="revenue-result" style="display:none">
+        <div class="highlight" style="margin-top:14px">
+          <div class="result-label">目標營業額</div>
+          <div class="result-value" id="revenue-val">—</div>
+          <div class="formula">= （目標獲利 + 固定成本）÷ 毛利率</div>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric"><div class="metric-label">損益兩平點</div><div class="metric-value" id="r-breakeven">—</div></div>
+          <div class="metric"><div class="metric-label">超出兩平部分</div><div class="metric-value" id="r-over">—</div></div>
+        </div>
+      </div>
+    </div>
+    <button class="export-btn" onclick="exportJPG('export-revenue','目標營業額')"><i class="ti ti-download" aria-hidden="true"></i> 匯出此頁為 JPG</button>
+  </div>
+
+  <!-- 行銷專用 -->
+  <div id="panel-perf" class="panel">
+    <div class="mode-switch">
+      <button class="mode-btn active" id="btn-a" onclick="switchMode('analyze')">分析現況</button>
+      <button class="mode-btn" id="btn-p" onclick="switchMode('predict')">預測業績</button>
+    </div>
+
+    <div id="mode-analyze">
+      <div class="card" id="export-analyze" style="border-color:#ddd6fe;">
+        <div class="card-title">分析現況 <span class="badge badge-purple">輸入實際數據</span></div>
+        <div class="card-desc">填入這期真實數字，自動換算各項比率，找出漏斗弱點。</div>
+        <div class="field"><label>曝光量（人次）</label><input type="number" id="a-exp" placeholder="請輸入曝光人次" oninput="calcAnalyze()"/></div>
+        <div class="input-row">
+          <div class="field"><label>點擊數</label><input type="number" id="a-clicks" placeholder="請輸入點擊數" oninput="calcAnalyze()"/><div class="hint">÷ 曝光量 = 點擊率</div></div>
+          <div class="field"><label>點擊率 <span class="derived-tag">自動換算</span></label><input type="text" id="a-ctr" disabled placeholder="—"/></div>
+        </div>
+        <div class="input-row">
+          <div class="field"><label>訂單數</label><input type="number" id="a-orders" placeholder="請輸入訂單數" oninput="calcAnalyze()"/><div class="hint">÷ 點擊數 = 轉換率</div></div>
+          <div class="field"><label>轉換率 <span class="derived-tag">自動換算</span></label><input type="text" id="a-cvr" disabled placeholder="—"/></div>
+        </div>
+        <div class="input-row">
+          <div class="field"><label>總營業額（元）</label><input type="number" id="a-total" placeholder="請輸入總營業額" oninput="calcAnalyze()"/><div class="hint">÷ 訂單數 = 客單價</div></div>
+          <div class="field"><label>平均客單價 <span class="derived-tag">自動換算</span></label><input type="text" id="a-aov" disabled placeholder="—"/></div>
+        </div>
+        <div id="analyze-result" style="display:none">
+          <hr class="divider"/>
+          <div class="metrics-grid">
+            <div class="metric"><div class="metric-label">點擊率</div><div class="metric-value" id="am-ctr">—</div></div>
+            <div class="metric"><div class="metric-label">轉換率</div><div class="metric-value" id="am-cvr">—</div></div>
+            <div class="metric"><div class="metric-label">平均客單價</div><div class="metric-value" id="am-aov">—</div></div>
+            <div class="metric"><div class="metric-label">實際購買率</div><div class="metric-value" id="am-rate">—</div></div>
+          </div>
+          <div class="funnel">
+            <div class="funnel-step" id="af-exp">—</div><span class="funnel-arrow">›</span>
+            <div class="funnel-step" id="af-clicks">—</div><span class="funnel-arrow">›</span>
+            <div class="funnel-step" id="af-orders">—</div><span class="funnel-arrow">›</span>
+            <div class="funnel-step" id="af-rev">—</div>
+          </div>
+        </div>
+      </div>
+      <button class="export-btn" onclick="exportJPG('export-analyze','業績分析現況')"><i class="ti ti-download" aria-hidden="true"></i> 匯出此頁為 JPG</button>
+    </div>
+
+    <div id="mode-predict" style="display:none">
+      <div class="card" id="export-predict" style="border-color:#ddd6fe;">
+        <div class="card-title">預測業績 <span class="badge badge-purple">輸入目標比率</span></div>
+        <div class="card-desc">調整各項數據，預測未來業績。可將「分析現況」的比率複製過來作為基準再調整。</div>
+        <div class="field"><label>預期曝光量（人次）</label><input type="number" id="p2-exp" placeholder="請輸入預期曝光人次" oninput="calcPredict()"/></div>
+        <div class="field"><label>預期點擊率（%）</label><input type="number" id="p2-ctr" placeholder="請輸入點擊率，例如 3" step="0.01" oninput="calcPredict()"/></div>
+        <div class="field"><label>預期轉換率（%）</label><input type="number" id="p2-cvr" placeholder="請輸入轉換率，例如 0.42" step="0.01" oninput="calcPredict()"/></div>
+        <div class="field"><label>預期平均客單價（元）</label><input type="number" id="p2-aov" placeholder="請輸入平均客單價" oninput="calcPredict()"/></div>
+        <div id="predict-result" style="display:none">
+          <div class="highlight-purple">
+            <div class="result-label">預測業績</div>
+            <div class="result-value" id="pv-revenue">—</div>
+            <div class="formula">= 曝光量 × 點擊率 × 轉換率 × 平均客單價</div>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric"><div class="metric-label">預估點擊人數</div><div class="metric-value" id="pv-clicks">—</div></div>
+            <div class="metric"><div class="metric-label">預估訂單數</div><div class="metric-value" id="pv-orders">—</div></div>
+            <div class="metric"><div class="metric-label">實際購買率</div><div class="metric-value" id="pv-rate">—</div></div>
+          </div>
+        </div>
+      </div>
+      <button class="export-btn" onclick="exportJPG('export-predict','業績預測')"><i class="ti ti-download" aria-hidden="true"></i> 匯出此頁為 JPG</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
+function switchMode(m){
+  document.getElementById('btn-a').classList.toggle('active',m==='analyze');
+  document.getElementById('btn-p').classList.toggle('active',m==='predict');
+  document.getElementById('mode-analyze').style.display=m==='analyze'?'block':'none';
+  document.getElementById('mode-predict').style.display=m==='predict'?'block':'none';
+}
+function fmt(n){return Math.round(n).toLocaleString('zh-TW');}
+function fmtD(n,d){return n.toFixed(d);}
+function getFee(id1,id2,totalEl){
+  const f1=parseFloat(document.getElementById(id1).value)||0;
+  const f2=parseFloat(document.getElementById(id2).value)||0;
+  const total=f1+f2;
+  const el=document.getElementById(totalEl);
+  if(total>0){el.style.display='block';el.textContent=`手續費合計：${fmtD(total,2)}%（平台 ${fmtD(f1,2)}% + 金流 ${fmtD(f2,2)}%）`;}
+  else{el.style.display='none';}
+  return total/100;
+}
+
+function calcMargin(){
+  const price=parseFloat(document.getElementById('p-price').value);
+  const cost=parseFloat(document.getElementById('p-cost').value);
+  const F=getFee('p-fee1','p-fee2','p-fee-total');
+  const box=document.getElementById('margin-result');
+  if(!price||isNaN(cost)||price<=0){box.style.display='none';return;}
+  // 毛利率 = (P×(1-F) - C) / P
+  const m=((price*(1-F))-cost)/price*100;
+  const feeAmt=price*F;
+  document.getElementById('margin-val').textContent=fmtD(m,2)+'%';
+  document.getElementById('margin-sub').textContent=
+    F>0
+      ? `售價 ${fmt(price)} − 成本 ${fmt(cost)} − 手續費 ${fmtD(feeAmt,2)} = 毛利 ${fmtD(price*(1-F)-cost,2)} 元`
+      : `每賣出 ${fmt(price)} 元，賺 ${fmtD(price-cost,2)} 元`;
+  document.getElementById('margin-formula').textContent=
+    F>0
+      ? `= （${fmt(price)}×${fmtD((1-F)*100,2)}% − ${fmt(cost)}）÷ ${fmt(price)}`
+      : `= （${fmt(price)} − ${fmt(cost)}）÷ ${fmt(price)}`;
+  box.style.display='block';
+}
+
+function calcPrice(){
+  const cost=parseFloat(document.getElementById('d-cost').value);
+  const mg=parseFloat(document.getElementById('d-margin').value);
+  const F=getFee('d-fee1','d-fee2','d-fee-total');
+  const warn=document.getElementById('price-warn');
+  const box=document.getElementById('price-result');
+  if(!cost||!mg||mg<=0){warn.style.display='none';box.style.display='none';return;}
+  // 防呆：1 - F - 毛利率 必須 > 0
+  const denom=1-F-(mg/100);
+  if(denom<=0){
+    warn.style.display='block';
+    box.style.display='none';
+    return;
+  }
+  warn.style.display='none';
+  // P = C / (1 - F - 毛利率)
+  const price=cost/denom;
+  const feeAmt=price*F;
+  const profit=price*(1-F)-cost;
+  document.getElementById('price-val').textContent='NT$ '+fmtD(price,2);
+  document.getElementById('price-sub').textContent=
+    F>0
+      ? `手續費 NT$ ${fmtD(feeAmt,2)}，扣除後毛利 NT$ ${fmtD(profit,2)}（${fmtD(mg,1)}%）`
+      : `毛利 ${mg}%，每件賺 NT$ ${fmtD(price-cost,2)}`;
+  document.getElementById('price-formula').textContent=
+    F>0
+      ? `= 成本 ÷ （1 − ${fmtD(F*100,2)}% − ${fmtD(mg,1)}%）`
+      : `= 進價 ÷ （1 − ${fmtD(mg,1)}%）`;
+  box.style.display='block';
+}
+
+function calcBreakeven(){
+  const fixed=parseFloat(document.getElementById('b-fixed').value);
+  const mg=parseFloat(document.getElementById('b-margin').value);
+  const box=document.getElementById('breakeven-result');
+  if(!fixed||!mg||mg<=0||mg>=100){box.style.display='none';return;}
+  const bep=fixed/(mg/100);
+  document.getElementById('breakeven-val').textContent='NT$ '+fmt(bep);
+  document.getElementById('breakeven-sub').textContent=`固定成本 NT$ ${fmt(fixed)}，毛利率 ${mg}%`;
+  box.style.display='block';
+}
+function calcRevenue(){
+  const fixed=parseFloat(document.getElementById('r-fixed').value);
+  const profit=parseFloat(document.getElementById('r-profit').value);
+  const mg=parseFloat(document.getElementById('r-margin').value);
+  const box=document.getElementById('revenue-result');
+  if(isNaN(fixed)||isNaN(profit)||isNaN(mg)||mg<=0||mg>=100){box.style.display='none';return;}
+  const rev=(profit+fixed)/(mg/100);
+  const bep=fixed/(mg/100);
+  document.getElementById('revenue-val').textContent='NT$ '+fmt(rev);
+  document.getElementById('r-breakeven').textContent='NT$ '+fmt(bep);
+  document.getElementById('r-over').textContent='NT$ '+fmt(rev-bep);
+  box.style.display='block';
+}
+function calcAnalyze(){
+  const exp=parseFloat(document.getElementById('a-exp').value);
+  const clicks=parseFloat(document.getElementById('a-clicks').value);
+  const orders=parseFloat(document.getElementById('a-orders').value);
+  const total=parseFloat(document.getElementById('a-total').value);
+  let ctr=null,cvr=null,aov=null;
+  if(exp>0&&!isNaN(clicks)){ctr=clicks/exp;document.getElementById('a-ctr').value=fmtD(ctr*100,4)+'%';}else{document.getElementById('a-ctr').value='—';}
+  if(clicks>0&&!isNaN(orders)){cvr=orders/clicks;document.getElementById('a-cvr').value=fmtD(cvr*100,4)+'%';}else{document.getElementById('a-cvr').value='—';}
+  if(orders>0&&!isNaN(total)){aov=total/orders;document.getElementById('a-aov').value='NT$ '+fmtD(aov,2);}else{document.getElementById('a-aov').value='—';}
+  const box=document.getElementById('analyze-result');
+  if(ctr===null||cvr===null||aov===null){box.style.display='none';return;}
+  document.getElementById('am-ctr').textContent=fmtD(ctr*100,2)+'%';
+  document.getElementById('am-cvr').textContent=fmtD(cvr*100,4)+'%';
+  document.getElementById('am-aov').textContent='NT$ '+fmt(aov);
+  document.getElementById('am-rate').textContent=fmtD(ctr*cvr*100,4)+'%';
+  document.getElementById('af-exp').textContent='曝光 '+fmt(exp);
+  document.getElementById('af-clicks').textContent='點擊 '+fmt(clicks);
+  document.getElementById('af-orders').textContent='訂單 '+fmt(orders);
+  document.getElementById('af-rev').textContent='NT$ '+fmt(total);
+  box.style.display='block';
+}
+function calcPredict(){
+  const exp=parseFloat(document.getElementById('p2-exp').value);
+  const ctr=parseFloat(document.getElementById('p2-ctr').value);
+  const cvr=parseFloat(document.getElementById('p2-cvr').value);
+  const aov=parseFloat(document.getElementById('p2-aov').value);
+  const box=document.getElementById('predict-result');
+  if(!exp||!ctr||!cvr||!aov){box.style.display='none';return;}
+  const clicks=exp*(ctr/100);
+  const orders=clicks*(cvr/100);
+  const revenue=orders*aov;
+  document.getElementById('pv-revenue').textContent='NT$ '+fmt(revenue);
+  document.getElementById('pv-clicks').textContent=fmt(clicks)+' 人';
+  document.getElementById('pv-orders').textContent=fmt(orders)+' 筆';
+  document.getElementById('pv-rate').textContent=fmtD((ctr/100)*(cvr/100)*100,4)+'%';
+  box.style.display='block';
+}
+async function exportJPG(id,name){
+  const el=document.getElementById(id);
+  if(!el){alert('找不到內容');return;}
+  const btn=el.nextElementSibling;
+  const origText=btn.innerHTML;
+  btn.innerHTML='<i class="ti ti-loader" aria-hidden="true"></i> 產生圖片中...';
+  btn.disabled=true;
+  try{
+    const canvas=await html2canvas(el,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false});
+    const link=document.createElement('a');
+    link.download=`貝拉拉_${name}_${new Date().toLocaleDateString('zh-TW').replace(/\//g,'-')}.jpg`;
+    link.href=canvas.toDataURL('image/jpeg',0.95);
+    link.click();
+  }catch(e){alert('匯出失敗，請填入數據後再試。');}
+  btn.innerHTML=origText;
+  btn.disabled=false;
+}
+</script>
